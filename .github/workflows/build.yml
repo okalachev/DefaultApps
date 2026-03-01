@@ -1,0 +1,62 @@
+name: Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal .app
+        run: |
+          VERSION="${{ github.event.release.tag_name || '0.0.0' }}"
+          VERSION="${VERSION#v}"
+          UNIVERSAL=true VERSION="$VERSION" ./build_app.sh
+
+      - name: Verify universal binary
+        run: |
+          file build/DefaultApps.app/Contents/MacOS/DefaultApps
+          lipo -info build/DefaultApps.app/Contents/MacOS/DefaultApps
+
+      - name: Create DMG
+        run: |
+          DMG_NAME="DefaultApps.dmg"
+          TEMP_DMG="build/temp.dmg"
+          FINAL_DMG="build/$DMG_NAME"
+
+          # Create temporary DMG
+          hdiutil create -srcfolder build/DefaultApps.app -volname "DefaultApps" -fs HFS+ -format UDRW "$TEMP_DMG"
+
+          # Mount it
+          MOUNT_DIR=$(hdiutil attach "$TEMP_DMG" -readwrite | grep '/Volumes/' | awk '{print $3}')
+
+          # Add symlink to Applications
+          ln -s /Applications "$MOUNT_DIR/Applications"
+
+          # Unmount
+          hdiutil detach "$MOUNT_DIR"
+
+          # Convert to compressed read-only DMG
+          hdiutil convert "$TEMP_DMG" -format UDZO -o "$FINAL_DMG"
+          rm -f "$TEMP_DMG"
+
+          echo "DMG created: $FINAL_DMG"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DefaultApps
+          path: build/DefaultApps.dmg
+
+      - name: Upload to release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/DefaultApps.dmg
