@@ -1,8 +1,8 @@
 # DefaultApps
 
-This app allows to choose the default handler for URI schemes in macOS (e.(e.g. `http:`, `mailto:`, `tg`, `ssh`, etc.):
+This app allows to choose the default handler for URI schemes in macOS (e. g. `http:`, `mailto:`, `tg`, `ssh`):
 
-<img src="screenshot.png" alt="DefaultApps" width="600">
+<p align="center"><img src="screenshot.png" alt="DefaultApps" width="800"></p>
 
 Vibe-coded.
 
