@@ -65,14 +65,16 @@ cat > "$CONTENTS/Info.plist" << EOF
     <true/>
     <key>LSApplicationCategoryType</key>
     <string>public.app-category.utilities</string>
+    <key>CFBundleIconFile</key>
+    <string>DefaultApps</string>
     <key>NSPrincipalClass</key>
     <string>NSApplication</string>
 </dict>
 </plist>
 EOF
 
-# Generate a simple app icon using system tool (optional, creates a generic icon)
-# If you want a custom icon, replace AppIcon.icns in Resources/
+# Copy app icon
+cp "$SCRIPT_DIR/DefaultApps.icns" "$RESOURCES/DefaultApps.icns"
 
 echo "==> Done!"
 echo "    App bundle: $APP_DIR"
