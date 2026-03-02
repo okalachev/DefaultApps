@@ -4,6 +4,8 @@ This app allows to choose the default handler for URI schemes in macOS (e. g. `h
 
 <p align="center"><img src="screenshot.png" alt="DefaultApps" width="800"></p>
 
+<p align="center"><big>⬇️ Download: <code><a href="https://github.com/okalachev/DefaultApps/releases/latest/download/DefaultApps.dmg">DefaultApps.dmg</a></code></big></p>
+
 Vibe-coded.
 
 ## Build
