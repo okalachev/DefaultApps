@@ -4,6 +4,10 @@ import AppKit
 @main
 struct DefaultAppsApp: App {
     
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.0.0"
+    }
+    
     init() {
         // Make the process a regular app with Dock icon and proper activation
         NSApplication.shared.setActivationPolicy(.regular)
@@ -22,7 +26,7 @@ struct DefaultAppsApp: App {
                 Button("About DefaultApps") {
                     NSApplication.shared.orderFrontStandardAboutPanel(options: [
                         .applicationName: "DefaultApps",
-                        .applicationVersion: "1.0.0",
+                        .applicationVersion: appVersion,
                         .credits: NSAttributedString(
                             string: "https://github.com/okalachev/DefaultApps",
                             attributes: [

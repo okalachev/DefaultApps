@@ -3,7 +3,11 @@ set -e
 
 APP_NAME="DefaultApps"
 BUNDLE_ID="com.defaultapps.app"
-VERSION="${VERSION:-1.0.0}"
+# Version: from env, git tag, or fallback
+if [ -z "$VERSION" ]; then
+    VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
+    VERSION="${VERSION#v}"
+fi
 UNIVERSAL="${UNIVERSAL:-false}"
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
